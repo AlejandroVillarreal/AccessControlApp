@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1061824188782",
+    "project_id": "accescontrol-17917",
+    "storage_bucket": "accescontrol-17917.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061824188782:android:6ac8549426aeab0c6fb17f",
+        "android_client_info": {
+          "package_name": "com.example.accescontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061824188782-vabgpqade4tm0cma7jb98qodn9l4qbn4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_panzTSYrOBujzUGFtpvq76TJZx1EWXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061824188782-vabgpqade4tm0cma7jb98qodn9l4qbn4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
