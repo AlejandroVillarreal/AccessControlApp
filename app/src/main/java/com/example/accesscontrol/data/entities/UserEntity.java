@@ -17,6 +17,9 @@ public class UserEntity {
 
     @ColumnInfo(name = "NAME")
     public String name;
+
+    @ColumnInfo(name = "TYPE")
+    public String type;
     
     /*
     @ColumnInfo(name = "PHONE")

@@ -38,6 +38,7 @@ public class NotificationsFragment extends Fragment {
     private ImageView picImageView;
     private DatabaseReference databaseReference;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
@@ -68,8 +69,9 @@ public class NotificationsFragment extends Fragment {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         //Log.d("ImageURL", intentResult.getContents());
         if (intentResult.getContents() != null) {
+            int end_index = intentResult.getContents().indexOf(" ");
 
-            Glide.with(context).load(intentResult.getContents()).into(picImageView);
+            Glide.with(context).load(intentResult.getContents().substring(0, end_index)).into(picImageView);
             HashMap<Object, String> hashMap = new HashMap<>();
 
             Calendar cal = Calendar.getInstance();
@@ -79,6 +81,8 @@ public class NotificationsFragment extends Fragment {
             String time = hourFormat.format(cal.getTime());
             hashMap.put("date", date);
             hashMap.put("hour", time);
+            hashMap.put("generated_by", intentResult.getContents().substring(end_index + 1));
+            hashMap.put("id_pic", intentResult.getContents().substring(0, end_index));
             databaseReference.child("History").child(randomKey).setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {

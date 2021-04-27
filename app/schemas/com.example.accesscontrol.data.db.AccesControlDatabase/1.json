@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "43472dce3c44ba2c73e296bd8d2944eb",
+    "identityHash": "826568cfb1fd460499f54d13fa8545c9",
     "entities": [
       {
         "tableName": "USER_ENTITY",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `FIREBASE_ID` TEXT, `EMAIL` TEXT, `NAME` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `FIREBASE_ID` TEXT, `EMAIL` TEXT, `NAME` TEXT, `TYPE` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -31,6 +31,12 @@
             "columnName": "NAME",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "TYPE",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -46,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '43472dce3c44ba2c73e296bd8d2944eb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '826568cfb1fd460499f54d13fa8545c9')"
     ]
   }
 }

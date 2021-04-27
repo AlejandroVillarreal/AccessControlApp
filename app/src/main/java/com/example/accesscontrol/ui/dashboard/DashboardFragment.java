@@ -28,6 +28,13 @@ import com.example.accesscontrol.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -132,6 +139,25 @@ public class DashboardFragment extends Fragment {
     }
 
     public void generateQRCode(View v) {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String user_id = user.getUid();
+        DatabaseReference databaseReference = database.getReference("Users").child(user_id).child("name");
+        final String[] user_name = new String[1];
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user_name[0] = snapshot.getValue().toString();
+                Log.d("UserName ", user_name[0]);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         MultiFormatWriter writer = new MultiFormatWriter();
 
 
@@ -140,7 +166,7 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onSuccess(Uri uri) {
                     if (isAdded()) {
-                        qrURL = uri.toString();
+                        qrURL = uri.toString() + " " + user_name[0];
                         Log.d("ImageURL", qrURL);
                         //Glide.with(context).load(qrURL).into(qrImageView);
                         try {

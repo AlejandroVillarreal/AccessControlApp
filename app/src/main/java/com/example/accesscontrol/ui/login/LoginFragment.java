@@ -1,5 +1,7 @@
 package com.example.accesscontrol.ui.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +51,10 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(this::login);
         Button registerButton = root.findViewById(R.id.buttonRegister);
         registerButton.setOnClickListener(this::register);
+
+        //BottomNavigationView navView = root.findViewById(R.id.nav_view);
+        //navView.findViewById(R.id.navigation_notifications).setVisibility(View.GONE);
+
         observe();
         return root;
     }
@@ -93,6 +99,12 @@ public class LoginFragment extends Fragment {
         String passwordInput = editTextPassword.getText().toString().trim();
         loginViewModel.connect(emailInput, passwordInput);
 
+
+    }
+
+    public void setUserPreferences() {
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
     }
 
     //Button Fragment

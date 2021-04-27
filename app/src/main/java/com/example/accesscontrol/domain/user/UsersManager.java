@@ -39,6 +39,7 @@ public class UsersManager {
     public void signIn(String email, String password, LoginResult loginResult) {
 
         usersRepository.signIn(email, password, loginResult);
+
     }
 
     public void signOut(LogoutResult logoutResult) {
@@ -60,4 +61,5 @@ public class UsersManager {
     public void saveUserId(String userId) {
 
     }
+
 }
