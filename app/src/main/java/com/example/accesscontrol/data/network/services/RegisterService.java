@@ -43,7 +43,7 @@ public class RegisterService {
                     hashMap.put("email", userEntity.email);
                     hashMap.put("user_id", userEntity.firebaseId);
                     hashMap.put("name", userEntity.name);
-
+                    hashMap.put("type", "");
                     database.child(FirebaseTables.USERS.name).child(userEntity.firebaseId).setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

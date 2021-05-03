@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
 
     public void logout(View v) {
         //homeViewModel.onSignOutSuccess();
+        FirebaseAuth.getInstance().signOut();
         navController.navigate(HomeFragmentDirections.actionNavigationHomeToNavigationLogin());
     }
 

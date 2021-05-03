@@ -42,6 +42,7 @@ public class LoginService {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "SignInWithEmail:success");
+
                             loginResult.onSignInSuccessful(mAuth.getCurrentUser().getUid());
                         } else {
                             Log.d(TAG, "signInWithEmail:failure", task.getException());

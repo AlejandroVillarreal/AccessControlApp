@@ -11,12 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.accesscontrol.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -27,7 +35,7 @@ public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
     private EditText editTextEmail;
     private EditText editTextPassword;
-
+    private BottomNavigationView navView;
     public LoginFragment() {
         // Required empty public constructor
 
@@ -37,6 +45,8 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+
     }
 
     @Override
@@ -47,6 +57,10 @@ public class LoginFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
         editTextEmail = root.findViewById(R.id.editTextEmail);
         editTextPassword = root.findViewById(R.id.editTextPassword);
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navView = getActivity().findViewById(R.id.nav_view);
+        //navView.getMenu().findItem(R.id.navigation_dashboard).setVisible(false);
         Button loginButton = root.findViewById(R.id.buttonLogin);
         loginButton.setOnClickListener(this::login);
         Button registerButton = root.findViewById(R.id.buttonRegister);
@@ -54,7 +68,6 @@ public class LoginFragment extends Fragment {
 
         //BottomNavigationView navView = root.findViewById(R.id.nav_view);
         //navView.findViewById(R.id.navigation_notifications).setVisibility(View.GONE);
-
         observe();
         return root;
     }
@@ -88,6 +101,7 @@ public class LoginFragment extends Fragment {
 
                 navController.navigate(LoginFragmentDirections.actionNavigationLoginToNavigationHome(loginViewModel.getUserId()));
                 Log.d("user_id", loginViewModel.getUserId());
+                setMenu(loginViewModel.getUserId());
 //                findNavController()LoginFragmentDirections.actionLoginToHome();
             }
         });
@@ -110,5 +124,55 @@ public class LoginFragment extends Fragment {
     //Button Fragment
     public void register(View v) {
         navController.navigate(LoginFragmentDirections.actionNavigationLoginToNavigationRegister());
+    }
+
+    private void setMenu(String user_id) {
+        //final AtomicBoolean done = new AtomicBoolean(false);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Log.d("User id", user_id);
+        final String[] user_type = new String[1];
+        DatabaseReference databaseReference = database.getReference("Users").child(user_id).child("type");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user_type[0] = snapshot.getValue().toString();
+                Log.d("User Type ", user_type[0]);
+                //done.set(true);
+                switch (user_type[0]) {
+                    case "residente":
+                        navView.getMenu().findItem(R.id.navigation_notifications).setVisible(false);
+                        navView.getMenu().findItem(R.id.historyFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.userManagementFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.navigation_dashboard).setVisible(true);
+                        return;
+                    case "admin":
+                        navView.getMenu().findItem(R.id.navigation_notifications).setVisible(true);
+                        navView.getMenu().findItem(R.id.historyFragment).setVisible(true);
+                        navView.getMenu().findItem(R.id.userManagementFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.navigation_dashboard).setVisible(true);
+                        return;
+                    case "guardia":
+                        navView.getMenu().findItem(R.id.navigation_dashboard).setVisible(false);
+                        navView.getMenu().findItem(R.id.userManagementFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.navigation_notifications).setVisible(true);
+                        navView.getMenu().findItem(R.id.historyFragment).setVisible(true);
+                        return;
+                    case "":
+                        navView.getMenu().findItem(R.id.navigation_notifications).setVisible(false);
+                        navView.getMenu().findItem(R.id.historyFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.userManagementFragment).setVisible(false);
+                        navView.getMenu().findItem(R.id.navigation_dashboard).setVisible(true);
+                        return;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //while (user_type[0].isEmpty());
+        //return user_type[0];
     }
 }
